@@ -1,37 +1,30 @@
 <div align="center">
 
-# 🚀 SulgX Panel (Version 1.0)
+# 🚀 SulgX Panel (Version 1.1.0)
 
-[![Status](https://img.shields.io/badge/Status-Stable_v1.0.0-success?style=for-the-badge)](#)
-[![Python](https://img.shields.io/badge/Python-3.9%2B-blue?style=for-the-badge&logo=python)](#)
-[![License](https://img.shields.io/badge/License-Non--Commercial-red?style=for-the-badge)](#)
-[![Platform](https://img.shields.io/badge/Platform-Render_%7C_Railway_%7C_Dockfly-lightgrey?style=for-the-badge)](#)
+[![Release](https://img.shields.io/badge/Release-v1.1.0-brightgreen?style=for-the-badge)](https://github.com/SulgX/SulgX-Panel/releases)
+[![Python](https://img.shields.io/badge/Python-3.11%2B-blue?style=for-the-badge&logo=python)](https://www.python.org/)
+[![License](https://img.shields.io/badge/License-Non--Commercial-red?style=for-the-badge)](LICENSE)
+[![Platform](https://img.shields.io/badge/Platform-Railway%20%7C%20Render%20%7C%20Dockfly%20%7C%20Back4app%20%7C%20Scalingo-lightgrey?style=for-the-badge)](https://github.com/SulgX/SulgX-Panel)
 
 <strong>Readme:</strong>
   <a href="README.md">English</a> |
   <a href="README-fa.md">فارسی</a>
-</div>
 
 ![SulgX Panel Screenshot](img/SulgX.png)
 
-> **A lightweight, self-hosted subscription management panel for VLESS over WebSocket + TLS.**  
-> Built entirely in a single Python file, powered by FastAPI and SQLite.
-
-### 📸 Panel Overview
-<p align="center">
-  <img src="img/sc.jpg" alt="پنل SulgX - تصویر ۱" width="70%" />
-</p>
-
-<p align="center">
-  <img src="img/sc2.jpg" alt="پنل SulgX - تصویر ۲" width="70%" />
-</p>
-
+![SulgX Panel Screenshot](img/sc2.jpg)
+![SulgX Panel Screenshot](img/sc.jpg)
 </div>
+
+> **A lightweight, self‑hosted subscription management panel for VLESS over WebSocket + TLS.**  
+> Built entirely in a single Python file, powered by FastAPI and SQLite.
 
 ---
 
 ## 📖 Table of Contents
 - [✨ Key Features](#-key-features)
+- [🆕 What's New in v1.1.0](#-whats-new-in-v110)
 - [🚀 Quick Start & Deployment](#-quick-start--deployment)
 - [☁️ Deployment Platforms](#-deployment-platforms)
 - [📁 Repository Architecture](#-repository-architecture)
@@ -44,7 +37,7 @@
 ## ✨ Key Features
 
 ### 🔐 Security & Access
-- **Robust Authentication:** JWT-based sessions with HTTP‑only, secure cookies.
+- **Robust Authentication:** JWT‑based sessions with HTTP‑only, secure cookies.
 - **Anti‑Brute Force:** Rate limiting applied to logins and API interactions.
 - **Strict Passwords:** Enforced policy (min 8 chars, uppercase, lowercase, numbers).
 - **Audit Logging:** Logs all login attempts (Success/Fail, IP, User‑Agent).
@@ -53,6 +46,8 @@
 - **Full Lifecycle:** Create, edit, toggle, and safely delete VLESS configs.
 - **Granular Control:** Per‑user traffic limits (GB), expiration days, and max concurrent connections.
 - **Advanced Routing:** Custom Path, SNI, Host, and TLS Fingerprints per inbound.
+- **Fragment Support:** Add packet fragmentation ranges (e.g., `1000-2000`) to counter DPI.
+- **Country Flags:** Assign a flag (🇮🇷, 🇩🇪, …) to each config – shown in the panel and subscription links.
 - **Bulk Operations:** Batch activate, deactivate, reset, or delete configs.
 - **Immutable Core:** The default `SulgX` inbound is systematically protected against accidental deletion.
 
@@ -71,150 +66,155 @@
 - **Event Alerts:** Panel Logins, Expired Users, Errors, and 90% Quota warnings.
 - **Live Preview:** Real‑time JSON template rendering in the dashboard.
 
+### ⚡ Intelligent Keep‑Alive (Anti‑Sleep)
+- **Dual‑Mode:** Simple (for Render/Railway) and Advanced (for Dockfly) keep‑alive pings.
+- **Configurable:** Set interval, enable/disable, and choose mode directly from the panel settings.
+- **Self‑Healing:** Automatically adjusts request headers and intervals to avoid provider blocks.
+
+---
+
+## 🆕 What's New in v1.1.0
+
+| Category | Improvement |
+|----------|-------------|
+| **UI & UX** | Major polish of the glass‑morphism interface. Fixed the Blue Theme selection bug and ensured theme settings persist across sessions. Mobile responsiveness greatly improved for all tables and control panels. |
+| **Performance** | Link‑cache is now periodically cleaned to prevent memory leaks. Scanner tasks are correctly cancelled on WebSocket close. |
+| **Anti‑Sleep** | Keep‑Alive engine completely re‑designed. Now features two distinct modes (`Simple` / `Advanced`) that can be switched in real time from the panel. |
+| **Inbounds** | Added **Fragment (FRAG)** support to enhance DPI bypass. Country **Flags** can be assigned to each inbound and are displayed everywhere (panel, sub‑links, user dashboard). |
+| **User Dashboard** | Added a live usage progress bar with color‑coded thresholds (green → yellow → red) so end‑users can instantly see their consumption. |
+| **Telegram** | Fixed the language toggle (English / Persian). It now correctly saves and restores the selected language. |
+| **Database** | Automatic schema migration – existing installations upgrading from older versions will automatically get the `flag` and `fragment` columns without manual intervention. |
+| **Bug Fixes** | Settings status cards now correctly sync with actual configurations. Time‑zone and language selectors are fully harmonised. |
+
+For a full list of commits, see the [v1.1.0 release](https://github.com/SulgX/SulgX-Panel/releases/tag/v1.1.0).
+
 ---
 
 ## 🚀 Quick Start & Deployment
 
 > [!NOTE]
-> SulgX will run on *any* platform that supports ASGI Python applications (Uvicorn/Gunicorn) and standard WebSocket connections.
+> The project now runs natively through its **Dockerfile**. Simply fork the repo, set your environment variables, and let the platform build it for you.  
+> No manual start commands or Gunicorn configuration are required for the recommended platforms.
 
-### 🍴 Step 1: Fork the Repository
-1. Go to the main repository on GitHub: [https://github.com/SulgX/SulgX-Panel](https://github.com/SulgX/SulgX-Panel)
-2. Click the **Fork** button at the top right of the page.
-3. In the window that appears, select your own account as the destination and wait for the fork to complete.
-4. You now have a complete copy of the project under your GitHub account, which you can modify as you wish.
+### 🍴 Step 1: Fork & Configure
+1. Fork this repository to your own GitHub account.
+2. (Optional) For maximum stability, you can pin your deployments to the **release tag** `v1.1.0` instead of the `main` branch.
 
-### ☁️ Step 2: Sign Up for a Cloud Platform
-Choose one of the three recommended platforms below and sign up (you can often sign in directly with your GitHub account and grant access):
+### ☁️ Step 2: Choose a Platform
+All five platforms listed below support **WebSocket**, can deploy directly from a **Dockerfile**, and **do not require a credit card or phone number** – only an email or GitHub account.
 
-- [**Render**](https://render.com/) ← Main recommendation, no credit card required
-- [**Railway**](https://railway.app/) ← Modern interface, free initial credit
-- [**Dockfly**](https://dockfly.app/) ← Minimal and simple
+- [**Railway**](https://railway.app/) ← Top recommendation (free credit, persistent volumes)
+- [**Render**](https://render.com/) ← Free tier with persistent disks
+- [**Dockfly**](https://dockfly.app/) ← Minimal & simple
+- [**Back4app**](https://www.back4app.com/) ← Parse‑based, generous free tier
+- [**Scalingo**](https://scalingo.com/) ← French PaaS, 30‑day free trial
 
-### 🚀 Step 3: Deploy the Project
+> Other platforms such as **Koyeb**, **Fly.io**, **Northflank**, or **Zeabur** also work perfectly with SulgX, but they require a credit card or phone number for registration.
 
-<details>
-<summary><b>🔹 Deploy on Render</b></summary>
+### 🚀 Step 3: Deploy with the Dockerfile
 
-1. In the Render dashboard, click **New +** and select **Web Service**.
-2. In the GitHub connection section, find your forked repository (`SulgX-Panel`) and click **Connect**.
-3. Render automatically reads the `render.yaml` file. Confirm the service name and branch.
-4. Scroll down to the **Environment Variables** section and enter the following variables:
-   - `ADMIN_PASSWORD`
-   - `SECRET_KEY`
-   - `DOMAIN`  
-   *(Values should follow the environment variables table later in this section.)*
-5. Click **Create Web Service**. After a few minutes, your service's public URL will be generated (e.g., `sulgx-test.onrender.com`).
+1. **Connect your forked repo** in your chosen platform.
+2. The platform will automatically detect the included `Dockerfile` and build the application.
+3. **Environment Variables** – add the following variables in the platform’s dashboard:
 
-</details>
-
-<details>
-<summary><b>🔹 Deploy on Railway</b></summary>
-
-1. In Railway, click **New Project** and select **Deploy from GitHub repo**.
-2. Choose your forked repository.
-3. Railway automatically detects the `Procfile`. To add environment variables, go to the **Variables** tab and add `ADMIN_PASSWORD`, `SECRET_KEY`, and `DOMAIN` with appropriate values.
-4. The build starts automatically, and you'll receive a public domain.
-
-> [!TIP]
-> 🗝️ Railway users: Add Railway's IP range to the Clean IP list for accurate scanning.
-
-</details>
-
-<details>
-<summary><b>🔹 Deploy on Dockfly</b></summary>
-
-1. In Dockfly, create a **New Project**, set the source to **GitHub**, and select your forked repository.
-2. In the Environment section, add the same three variables.
-3. If the start command doesn't run automatically, enter the following manually:
-
-```bash
-gunicorn -k uvicorn.workers.UvicornWorker main:app --bind 0.0.0.0:$PORT
-```
-
-
-4. Click **Deploy**.
-
-</details>
-
-### 📌 Environment Variables
-You must set the following environment variables in your provider's dashboard:
-
-| Variable | Example Value | Description |
-| :--- | :--- | :--- |
-| `ADMIN_PASSWORD` | `StrongPass!123` | Required for panel access (min 8 chars, upper & lowercase, numbers). |
-| `SECRET_KEY` | `random_long_string` | Used to secure JWT login cookies. |
+| Variable | Example | Description |
+|----------|---------|-------------|
+| `ADMIN_PASSWORD` | `StrongPass!123` | Panel login password (min 8 chars, uppercase, lowercase, digits). |
+| `SECRET_KEY` | `random_long_string` | Secret key used to sign JWT cookies. |
 | `DOMAIN` | `sulgx.up.railway.app` | Your public domain. *Highly recommended for correct link generation.* |
-| `DB_PATH` | `/tmp/panel.db` | Where the SQLite DB is stored. Use `/data/panel.db` if using persistent volumes. |
+| `DB_PATH` | `/data/panel.db` | Path for the SQLite database. **Important:** If your platform supports persistent volumes (see table below), mount a volume at `/data` to keep your data safe. |
+| `PORT` | `8000` | (optional) The port your app listens on. Most platforms ignore this and use their own. |
 
-### 📌 Start Command
-Use this exact command on all platforms (if needed manually):
+4. **Persist your data**  
+   Platforms that support persistent volumes let you keep your database across restarts. For platforms that don’t (or if you need extra safety), connect an **external PostgreSQL** database by setting the `DATABASE_URL` environment variable.
 
+5. **Access the panel**  
+   Once deployed, open your app’s public URL and navigate to `/panel`. Log in with the password you set in `ADMIN_PASSWORD`.
 
+### 📌 Platform‑Specific Notes
 
-```bash
-gunicorn -k uvicorn.workers.UvicornWorker main:app --bind 0.0.0.0:$PORT
-```
+<details>
+<summary><b>🔹 Railway</b></summary>
 
+- Persistent volume: **Yes**. Attach a volume at mount path `/data`.
+- Keep‑Alive mode: `Simple` works best.
+</details>
+
+<details>
+<summary><b>🔹 Render</b></summary>
+
+- Persistent disk: **Yes**. Attach a disk at mount path `/data`.
+- Keep‑Alive mode: `Simple`. (Render sleeps after 15 min, but the keep‑alive will wake it up.)
+</details>
+
+<details>
+<summary><b>🔹 Dockfly</b></summary>
+
+- Persistent volume: **Yes**, but you must configure it in the service settings with mount path `/data`.
+- Keep‑Alive mode: `Advanced` is strongly recommended to prevent the container from sleeping.
+</details>
+
+<details>
+<summary><b>🔹 Back4app</b></summary>
+
+- Persistent volume: **No**. It is recommended to set `DB_PATH` to `/tmp/panel.db` and use an external PostgreSQL (`DATABASE_URL`) for production data.
+- Keep‑Alive: The free tier stays awake. `Simple` mode is sufficient.
+</details>
+
+<details>
+<summary><b>🔹 Scalingo</b></summary>
+
+- Persistent storage: **No** on the free trial. Use an external `DATABASE_URL` if you need permanent storage.
+- The 30‑day free trial requires only an email. After the trial, the service becomes paid.
+- Keep‑Alive mode: `Simple`.
+</details>
 
 ---
 
 ## ☁️ Deployment Platforms
 
-SulgX is built to run flawlessly across cloud PaaS providers. No Dockerfile or complex setup required.
+| Platform | Free Tier | WebSocket | Sleep Mode | Persistent Volume | Card Required | Phone Required |
+|----------|-----------|-----------|------------|-------------------|---------------|----------------|
+| **Railway** | $5 credit/month | ✅ | No (with keep‑alive) | ✅ (1 GB) | No | No |
+| **Render** | 750 h/month | ✅ | Yes (15 min) | ✅ (1 GB) | No | No |
+| **Dockfly** | 1 project (256 MB) | ✅ | No | ✅ | No | No |
+| **Back4app** | 0.25 CPU, 256 MB | ✅ | No | No | No | No |
+| **Scalingo** | 30‑day free trial | ✅ | No | No | No | No |
 
-### 🏆 Top Recommended Providers
-
-| Platform | Free Tier Limit | WebSocket | Sleep Mode | Credit Card Req? | Deployment Method |
-| :--- | :--- | :---: | :---: | :---: | :--- |
-| **Render** | 750 hours / month | ✅ | Yes (Delay) | No | Auto via `render.yaml` |
-| **Railway** | $5 Initial Credit | ✅ | No | No | Auto via `Procfile` |
-| **Dockfly** | 1 Project (256MB) | ✅ | No | No | Manual Start Command |
-
-<details>
-<summary><b>🌍 Click to view other compatible platforms</b></summary>
-
-| Platform | Free Tier | WebSocket | Sleep Mode | Card Req? |
-| :--- | :--- | :---: | :---: | :---: |
-| **Koyeb** | 1 Eco Service | ✅ | No | No |
-| **Fly.io** | Up to 3 Small VMs | ✅ | No | Yes (Verification) |
-| **Heroku** | Eco ($5/mo) | ✅ | Yes | Yes |
-| **DigitalOcean** | $5/mo Base | ✅ | No | Yes |
-| **Oracle Cloud** | Always Free ARM | ✅ | No | Yes (Verification) |
-
-</details>
+> [!NOTE]  
+> Free‑tier limits and pricing are subject to change. Always check the provider’s official website for the most up‑to‑date information.  
+> For platforms that do not offer persistent storage, you can connect an external PostgreSQL database by setting the `DATABASE_URL` environment variable. This will override the SQLite file and keep your data permanently safe.
 
 ---
 
 ## 📁 Repository Architecture
 
-The repository is kept intentionally minimal. Everything required for production is included:
-
-| File | Type | Purpose |
-| :--- | :---: | :--- |
-| `main.py` | **Core** | The beating heart of SulgX. Contains FastAPI backend, WebSocket tunnels, and embedded HTML/JS frontend. |
-| `requirements.txt` | **Config** | Strictly pinned Python dependencies ensuring build stability. |
-| `Procfile` | **Deploy** | Standardized startup instructions for Heroku, Railway, and Render. |
-| `render.yaml` | **Deploy** | Infrastructure‑as‑Code blueprint for instant 1‑click deployments on Render. |
-| `sulgx-config.toml` | **Docs** | Reference guide containing the required Environment Variables for manual setups. |
-| `.gitignore` | **Git** | Keeps the repository clean by excluding logs, caches, and local `.db` files. |
+| File | Purpose |
+|------|---------|
+| `main.py` | **Core application** – FastAPI backend, WebSocket tunnels, and embedded HTML/JS frontend. |
+| `Dockerfile` | **Container build** – creates a slim Python 3.11 image and starts the panel. |
+| `requirements.txt` | **Python dependencies** – pinned versions for consistent builds. |
+| `render.yaml` | **Render blueprint** – automates deployment on Render. |
+| `Procfile` | **Heroku/Railway start command** (optional) – if you prefer non‑Docker deployment. |
+| `.gitignore` | **Git ignore rules** – keeps logs, caches, and the database out of version control. |
 
 ---
 
 ## 💸 Bandwidth & Pricing Guide
 
 > [!IMPORTANT]
-> **SulgX Panel is 100% Free.** However, your cloud provider will charge you for the bandwidth your users consume.
+> **SulgX Panel is 100% Free.** However, your cloud provider charges for the **outbound bandwidth** your users consume.  
+> The figures below are approximations and may vary. Always refer to the provider’s official pricing page.
 
-| Hosting Platform | Included Free Bandwidth | Cost Per Extra GB (Approx.) |
-| :--- | :--- | :--- |
-| **Render** | 5 GB / month | `$0.10 / GB` |
-| **Railway** | Pay as you go | `$0.10 / GB` |
-| **Koyeb** | 5 GB / month | `$0.04` to `$0.10 / GB` |
-| **Fly.io** | Varies by region | `$0.02 / GB` |
-| **Oracle Cloud** | 10 TB / month | Standard Cloud Rates |
+| Platform | Included Free Bandwidth (approx.) | Cost Per Extra GB (approx.) |
+|----------|-----------------------------------|-----------------------------|
+| **Railway** | Pay as you go | $0.10 / GB |
+| **Render** | 5 GB / month | $0.10 / GB |
+| **Dockfly** | Not specified | Check provider |
+| **Back4app** | 100 GB / month | Check provider |
+| **Scalingo** | Not specified (trial period) | Check provider |
 
-*Monitor your cloud provider's billing dashboard to avoid unexpected charges. Use the Panel's monthly limits to control usage.*
+*Monitor your provider's billing dashboard and use the panel's monthly traffic limits to control consumption.*
 
 ---
 
@@ -223,11 +223,11 @@ The repository is kept intentionally minimal. Everything required for production
 > [!WARNING]
 > **READ CAREFULLY BEFORE DEPLOYING**
 
-* **Free & Non‑Commercial:** This software is provided 100% free of charge. **It is NOT for sale.**
-* **No Commercial VPNs:** Do NOT use this panel to sell VPN subscriptions. It is designed strictly for personal, educational, and experimental purposes.
-* **No Platform Abuse:** Do not abuse the free tiers of cloud providers by creating multiple accounts with temporary emails.
-* **Reporting:** If you see someone selling access to this specific panel or abusing infrastructure, please report it to the respective hosting provider.
-* **Zero Liability:** The developer assumes absolutely **zero** liability for any damages, billing overages, or Terms of Service violations incurred. You are solely responsible for your traffic.
+- **Free & Non‑Commercial:** This software is provided 100% free of charge. **It is NOT for sale.**
+- **No Commercial VPNs:** Do NOT use this panel to sell VPN subscriptions. It is designed strictly for personal, educational, and experimental purposes.
+- **No Platform Abuse:** Do not abuse the free tiers of cloud providers by creating multiple accounts with temporary emails.
+- **Reporting:** If you see someone selling access to this specific panel or abusing infrastructure, please report it to the respective hosting provider.
+- **Zero Liability:** The developer assumes absolutely **zero** liability for any damages, billing overages, or Terms of Service violations incurred. You are solely responsible for your traffic.
 
 ---
 
@@ -241,3 +241,9 @@ A massive thank you to the platforms and communities that make free internet too
   - [Chart.js](https://www.chartjs.org/)  
   - [aiosqlite](https://github.com/omnilib/aiosqlite)
 * The [**V2Fly**](https://www.v2fly.org/) project.
+
+---
+
+<p align="center">
+  <sub>Dedicated to the people of my homeland Iran, from <a href="https://github.com/SulgX">SulgX</a></sub>
+</p>
